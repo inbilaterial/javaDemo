@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+">
+    <!--加载mvc注解驱动-->
+    <mvc:annotation-driven/>
+    <!--不拦截静态资源-->
+    <mvc:default-servlet-handler/>
+    <!--配置视图解析器-->
+    <bean  class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+    <!--配置拦截器-->
+<!--    <mvc:interceptors>-->
+<!--        <mvc:interceptor>-->
+<!--            &lt;!&ndash;拦截路径**代表拦截所有，包含目录下的子目录&ndash;&gt;-->
+<!--            <mvc:mapping path="/goods/**"/>-->
+<!--            &lt;!&ndash;不拦截那些&ndash;&gt;-->
+<!--            <mvc:exclude-mapping path="/index.html"/>-->
+<!--            <mvc:exclude-mapping path="/goodSSM/login.html"/>-->
+<!--            <mvc:exclude-mapping path="/goodSSM/register.html"/>-->
+<!--            &lt;!&ndash;配置上自己的拦截器&ndash;&gt;-->
+<!--            <bean class="lihong.x.interceptor.CheckInterceptor"/>-->
+<!--        </mvc:interceptor>-->
+<!--    </mvc:interceptors>-->
+</beans>

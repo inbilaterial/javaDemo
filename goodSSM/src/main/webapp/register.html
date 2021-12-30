@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册页面</title>
+    <style type="text/css">
+        #app {
+            padding-top: 45px;
+        }
+
+        form {
+            padding-top: 5px;
+        }
+
+        input {
+            padding-top: 3px;
+        }
+
+        .sp1 {
+            padding-left: 45px;
+            color: red;
+            font-size: 10px;
+        }
+
+    </style>
+    <script src="js/vuejs-2.5.16.js"></script>
+    <script src="js/axios-0.18.0.js"></script>
+    <script src="js/allMethods.js"></script>
+    <script src="js/jquery-2.1.0.min.js"></script>
+    <script>
+        // 表单校验
+        function check_username(obj) {
+            if (obj == '' || obj == "") {
+                $("#sp-username").html("该输入框不能为空!!!")
+            } else {
+                $("#sp-username").html("")
+            }
+        }
+
+        function check_password(obj) {
+            if (obj == '' || obj == "") {
+                $("#sp-password").html("该输入框不能为空!!!")
+            } else {
+                $("#sp-password").html("")
+            }
+        }
+
+        function check_email(obj) {
+            if (obj == '' || obj == "") {
+                $("#sp-email").html("该输入框不能为空!!!")
+            } else {
+                $("#sp-email").html("")
+            }
+        }
+
+        // 显示密码
+        function show_password() {
+            $("#ipt-password").attr("type", "text")
+        }
+
+        // 隐藏密码
+        function hide_password() {
+            $("#ipt-password").attr("type", "password")
+        }
+
+    </script>
+
+
+</head>
+<body>
+<div id="app" align="center">
+    <h3>注册页面</h3>
+    <form action="/goodSSM/users/addUser" method="post">
+        <span class="sp1" id="sp-username"></span><br>
+        姓名：<input type="text" placeholder="姓名不能为空" name="username"
+                  onblur="check_username(this.value)">
+        <br>
+        <span class="sp1" id="sp-password"></span><br>
+        密码：<input type="password" placeholder="密码不能为空" id="ipt-password" name="password"
+                  onblur="check_password(this.value)" onmousedown="show_password()" onmouseup="hide_password()">
+        <br>
+        <span class="sp1" id="sp-email"></span><br>
+        邮箱：<input type="text" placeholder="邮箱不能为空" name="email"
+                  onblur="check_email(this.value)">
+        <br>
+        <span class="sp1" id="sp-nickname"></span><br>
+        昵称：<input type="text" placeholder="可选填" name="nickname">
+        <br><br>
+        <input type="submit" value="注册">
+        <input type="reset" value="重置">
+    </form>
+</div>
+</body>
+</html>

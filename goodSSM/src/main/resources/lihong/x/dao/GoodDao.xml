@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="lihong.x.dao.GoodDao">
+    <!--通过map类型来映射多个参数, #{写map中key}这样的即获取map中key对应value的值-->
+    <select id="getAll" resultType="lihong.x.pojo.Good" parameterType="lihong.x.pojo.Rpm">
+        select
+			g.gid, g.gname, g.price, gs.sname status, gk.kname kind
+        from
+			goods g, goods_status gs, goods_kind gk
+        where
+			g.sid = gs.sid and g.kid = gk.kid
+		limit #{start}, #{number}
+    </select>
+
+    <select id="getTotalSize" resultType="long">
+        select
+            count(*)
+        from
+            goods g, goods_status gs, goods_kind gk
+        where
+            g.sid = gs.sid and g.kid = gk.kid
+    </select>
+
+    <select id="getDetail" resultType="lihong.x.pojo.Good" parameterType="int">
+        select
+            g.gid, g.gname, g.price, gs.sid, gk.kid
+        from
+            goods g, goods_status gs, goods_kind gk
+        where
+            g.sid = gs.sid and g.kid = gk.kid and g.gid = #{gid}
+    </select>
+</mapper>

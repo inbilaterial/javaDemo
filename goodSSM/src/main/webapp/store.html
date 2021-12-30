@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>入库管理</title>
+    <script src="js/vuejs-2.5.16.js"></script>
+    <script src="js/axios-0.18.0.js"></script>
+    <script src="js/getParameter.js"></script>
+    <style type="text/css">
+        #bottom-show {
+            text-align: center;
+        }
+
+        a {
+            font-size: 16px;
+            text-decoration: none;
+        }
+
+        a:hover {
+            transform: scale(2);
+            font-size: 18px;
+            transition: linear;
+        }
+
+        .ul1 {
+            align-content: center;
+            text-align: center;
+            float: left;
+        }
+
+        .ul1 li {
+            float: left;
+            list-style: none;
+        }
+
+        span:hover {
+            font-size: 16px;
+            transform: scale(2);
+            transition: linear;
+        }
+
+    </style>
+</head>
+<body>
+<div id="app">
+    <table align="center" border="1px">
+        <tr>
+            <td>序号</td>
+            <td>商品名</td>
+            <td>价格</td>
+            <td>种类</td>
+            <td>状态</td>
+            <td align="center">LiHongXiao</td>
+        </tr>
+        <tr v-for="(good, index) in pagination.list">
+            <td v-text="index + 1"></td>
+            <td v-text="good.gname"></td>
+            <td v-text="good.price"></td>
+            <td v-text="good.kind"></td>
+            <td v-text="good.status"></td>
+            <td>
+                <input type="button" value="入库"/>
+                <input type="button" value="详情" @click="detailGoods(good.gid)"/>
+                <input type="button" value="修改" @click="updateGoods(good.gid)"/>
+                <input type="button" value="删除" @click="deleteGoods(good.gid, good.gname)"/>
+            </td>
+        </tr>
+    </table>
+    <div class="bottom-show-div1">
+        <ul v-for="(element, index) in pagination.totalPage" class="ul1">
+            <li class="li1">
+                <a href="javascript:;" v-text="index + 1"></a>
+            </li>
+        </ul>
+    </div>
+    <div id="bottom-show">
+
+        <div class="bottom-show-div2">
+            <h5>
+                总共有 <span v-text="pagination.totalSize"></span> 条,共有
+                <span v-text="pagination.totalPage"></span> 页
+            </h5>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    let vue = new Vue({
+        el: "#app",
+        data: {
+            pagination: []
+        },
+        methods: {
+            goodStore() {
+                let currentPage = getParameter("currentPage");
+                let pageSize = getParameter("pageSize");
+                axios.post("/good?action=goodStore", {
+                    "currentPage": currentPage, "pageSize": pageSize
+                }).then(response => {
+                    this.pagination = response.data.data
+                })
+            },
+            deleteGoods(id, name) {
+                let flag = confirm("您确定要删除"+ name + "吗？");
+                if (flag) {
+                    axios.get("/good?action=delete&gid=" + id).then(response=>{
+                        if (response.data.flag) {
+                            alert("删除成功!")
+                            location.href = "/index.html"
+                        } else {
+                            alert("删除失败!")
+                        }
+                    })
+                }
+            },
+            updateGoods(id) {
+                location.href = "/update.html?gid=" + id
+            }
+        },
+        created() {
+            this.goodStore()
+        }
+    });
+</script>
+</html>

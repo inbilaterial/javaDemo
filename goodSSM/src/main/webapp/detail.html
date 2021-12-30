@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>详情</title>
+    <script src="js/getParameter.js"></script>
+    <script src="js/vuejs-2.5.16.js"></script>
+    <script src="js/axios-0.18.0.js"></script>
+</head>
+<body>
+<div id="app" align="center">
+    <form action="" onsubmit="return false">
+        I D： <input type="text" disabled="true" v-model="good.gid"><br><br>
+        名称：<input type="text" v-model="good.gname"><br><br>
+        价格：<input type="text" v-model="good.price"><br><br>
+        状态：<select name="status" v-model="good.sid" id="status">
+                <option value="1">入库</option>
+                <option value="2">出库</option>
+                <option value="3">退还</option>
+                <option value="4">未入库</option>
+                <option value="5">未采购</option>
+            </select><br><br>
+        种类：<select name="kind" v-model="good.kid" id="kind">
+        <option value="1">水果</option>
+        <option value="2">蔬菜</option>
+        <option value="3">海鲜</option>
+    </select><br><br>
+        <input type="button" value="回到首页" @click="back_home()">
+    </form>
+</div>
+</body>
+<script>
+    let vue = new Vue({
+        el: "#app",
+        data: {
+            good: {}
+        },
+        methods: {
+            // 异步查询数据
+            get_detail() {
+                let gid = getParameter("gid")
+                axios.get("/goodSSM/goods/getDetail?gid=" + gid).then(response => {
+                    if (response.data.flag) {
+                        this.good = response.data.data
+                    } else {
+                        alert("获取数据失败...")
+                    }
+                })
+            },
+            // 回到首页
+            back_home() {
+                location.href = "http://localhost:8080/goodSSM/index.html"
+            }
+        },
+        created() {
+            this.get_detail()
+        }
+    });
+</script>
+</html>

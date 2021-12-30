@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登陆页面</title>
+    <script src="js/jquery-2.1.0.min.js"></script>
+    <script src="js/axios-0.18.0.js"></script>
+    <script src="js/vuejs-2.5.16.js"></script>
+    <style type="text/css">
+        #sp1{
+            padding-right: 6px;
+        }
+        body{
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+<div id="app" align="center">
+    <h3>登录页面</h3>
+    <form action="/goodSSM/users/userLogin" method="post">
+        <span class="sp1" id="sp-username"></span><br>
+        姓名：<input type="text" placeholder="姓名不能为空" name="username">
+        <br>
+        <span class="sp1" id="sp-password"></span><br>
+        密码：<input type="password" placeholder="密码不能为空" id="ipt-password" name="password"
+                  onmousedown="show_password()" onmouseup="hide_password()">
+        <br>
+        <br><br>
+        <span v-text="code" id="sp1"></span>
+        <input type="button" @click="getCode()" value="换一换"><br/>
+        验证码：<input type="text" placeholder="请输入验证码" name="checkCode"/>
+        <br>
+        <br><br>
+        <input type="submit" value="登录">
+        <input type="reset" value="重置">
+    </form>
+</div>
+</body>
+<script>
+    // 显示密码
+    function show_password() {
+        $("#ipt-password").attr("type", "text")
+    }
+
+    // 隐藏密码
+    function hide_password() {
+        $("#ipt-password").attr("type", "password")
+    }
+</script>
+<script>
+    let vue = new Vue({
+        el: "#app",
+        data: {
+            code: ""
+        },
+        methods: {
+            getCode() {
+                axios.get("/goodSSM/users/code?date="+new Date()).then(response => {
+                    this.code = response.data
+                })
+            }
+        },
+        created() {
+            this.getCode()
+        }
+    })
+</script>
+</html>

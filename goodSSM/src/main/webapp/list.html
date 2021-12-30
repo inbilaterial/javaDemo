@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>展示所有</title>
+    <script src="js/getParameter.js"></script>
+    <script src="js/vuejs-2.5.16.js"></script>
+    <script src="js/axios-0.18.0.js"></script>
+    <style type="text/css">
+        div {
+            margin: 20px auto;
+            width: 500px;
+            height: 30px;
+            line-height: 30px;
+            position: relative;
+        }
+
+        div li {
+            list-style-type: none;
+            float: left;
+            padding-right: 8px;
+        }
+        #d1{
+            position: absolute;
+            left:210px;
+        }
+        h5{
+            margin-left: 130px;
+        }
+        h5 span{
+            margin-top: -3px;
+            padding: 0px 6px;
+        }
+        .sp1 {
+            font-size: 12px;
+            color: red;
+            transition: linear;
+        }
+        .sp1:hover {
+            font-size: 16px;
+            transform: scale(5);
+        }
+        #d1 li a.active{
+            background-color: aquamarine;
+            color: black;
+            border-radius: 4px;
+            padding: 3px 5px;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <table align="center" border="1px">
+        <tr>
+            <td>序号</td>
+            <td>商品名</td>
+            <td>价格</td>
+            <td>种类</td>
+            <td>状态</td>
+            <td align="center">LiHongXiao</td>
+        </tr>
+        <tr v-for="(good, index) in pagination.list">
+            <td v-text="index + 1"></td>
+            <td v-text="good.gname"></td>
+            <td v-text="good.price"></td>
+            <td v-text="good.kind"></td>
+            <td v-text="good.status"></td>
+            <td>
+                <input type="button" value="入库"/>
+                <input type="button" value="详情" @click="getDetail(good.gid)"/>
+                <input type="button" value="修改"/>
+                <input type="button" value="删除"/>
+            </td>
+        </tr>
+    </table>
+    <div>
+        <div id="d1">
+            <li v-for="(i, index) in pages" ref="i" >
+                <!--
+                    :class="{active:i==pagination.currentPage}"
+                    如果i==当前页就给class属性加上active样式（原来class可以添加自己定义的样式，如果不等于就不添加）
+                -->
+                <a href="#" @click="go_to(i)" style="text-decoration: none" :class="{active:i==pagination.currentPage}">{{i}}</a>
+            </li>
+        </div>
+
+    </div>
+    <h5>
+        总共有<span v-text="pagination.totalPage" class="sp1"> </span>页
+        共<span v-text="pagination.totalSize" class="sp1"> </span>条
+        当前为第<span v-text="pagination.currentPage" class="sp1"> </span>页
+    </h5>
+</div>
+</body>
+<script>
+    let vue = new Vue({
+        el: "#app",
+        data: {
+            pagination: [],
+            pages:""
+        },
+        methods: {
+            // 异步查询所有
+            getAll() {
+                axios.get("/goodSSM/goods/getAll?currentPage=1&pageSize=5").then(response => {
+                    this.pages=response.data.data.totalPage
+                    console.log(this.pages)
+                    if (response.data.flag) {
+                        /*
+                        * 从服务器拿到的响应response.data是resultBean
+                        * resultBean.data拿到的是pageBean
+                        * pageBean中有分页list、当前页、总页数...
+                        * */
+                        this.pagination = response.data.data
+                    } else {
+                        alert("获取数据失败...")
+                    }
+                })
+            },
+            // 查看物品详情
+            getDetail(id) {
+                location.href = "http://localhost:8080/goodSSM/detail.html?gid=" + id
+            },
+            // 跳转
+            go_to(index) {
+                let n_index = index
+                axios.get("/goodSSM/goods/getAll?currentPage=" + n_index + "&pageSize=5").then(response => {
+                    if (response.data.flag) {
+                        this.pagination = response.data.data
+                    } else {
+                        alert("获取数据失败...")
+                    }
+                })
+            }
+        },
+        created() {
+            this.getAll()
+        }
+    })
+</script>
+</html>
